@@ -1,17 +1,19 @@
-
+#### Introduction
 
 # In jQuery, Deferreds and Promises provide more of a one shot interface, useful for 
-# ajax asynch calls and similar
-
-# It would be cool to be able to wrap other event sources, 
-# for example mous movements, clicks, keypresses, etc...
+# ajax async calls and similar. But deferreds and pomises provide a progress callback. 
+# This allows modelling of stream based computation in javascript. With some combinators,
+# it should be possible to mitigate the callback spagetty one finds in javascript, while still
+# use asynchronous calls. In essense, it should be possible to invert the control once more,
+# and expose a declarive(ish) dataflow.
 #
 # Currently eventStream is a quick and dirty wrapper around jQuery Deferreds and Promises, with
 # a few extras: 
 # 
-#  - eventStream.on:: (event,selector) -> eventStream turn the event on an element into a event source for the eventStream 
-#  - same as above, but the default behaviour of the event will be prevented 
-#  
+#  - `eventStream.on:: (event,selector) -> eventStream` turn the event on an element into a event source for the eventStream 
+#  - `eventStream.on_:: (event,selector) -> eventStream` same as above, but the default behaviour of the event will be prevented 
+#  - a few other event sources and transformers
+#
 # It is an unsafe(ish) interface, because the deferred is exposed, unlike jQuery's dfd.promise()
 # Laziness, prevents from writing the 'proper' promise wrapper
 #
@@ -22,16 +24,27 @@
 #
 #  - DOM observers
 #  - DOM sources 
+#  - check if it could be useful to use and possibly integrate jsView
+#  - D3 integration?
+#  - add demos
+#  - add tests, quickckeck would be cool
+#  - will be intersting to try c
 #  - resolve inconsistencies between sourses, constructors, ...  
 # for example `on` vs `timer`
 
-# we are inside a closure, just claim a namespace
+#### Usage and dependencies
+
+# Depends on coffeescript, jQuery 1.7, and if you want the shiny doc docco.coffee  
+#  
+# There will be examples and demos at some point, hopefully soon
+
+# we are inside a closure, just an alias will do
 $ = jQuery
 
 #### Declarations
 
 # eventStream is an object type, which inherits from jQuery.Deferred, extended
-# with a number of useful methods, aiming to get closer to an FRP-like/arrows
+# with a number of useful methods, aiming to get closer to an FRP|arrows-like
 # interface
 eventStream = {}
 
