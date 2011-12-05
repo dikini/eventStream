@@ -31,6 +31,15 @@
 #  - will be intersting to try c
 #  - resolve inconsistencies between sourses, constructors, ...  
 # for example `on` vs `timer`
+#
+# There are quite a few question marks here, some of the answers will come from reading the Deferred's code
+# others are yet more vague
+#
+# 1. What are the semantics of the deferred's, do they implement buffered  channels? 
+# 2. What are the best, minimal combinators, should more be implemented?  
+# 3. Unregistering callbacks? How can it be done using jQuery interface  
+# 4. In the absense of proxies, using the old (current) dom monitoring can get very expensive, how to mitigate?  
+# 5. more to come....
 
 #### Usage and dependencies
 
@@ -59,12 +68,16 @@ eventStream.prototype = $.Deferred
 # type = `eventStream.timer:: ( Number, eventStream, String) -> eventStream`
 eventStream::timer = (delay = 6000, stream = new eventStream(), type = "timer" ) ->
     clock = 0
+    
+    # a recursive procedure to run the timer clock
     timer = -> stream.notify
             type: type
             timer: delay
             clock: clock
+            setTimeout timer, delay
+            clock += 1
+    #kickstart the timer
     setTimeout timer, delay
-    clock += 1
     stream
 
 # attach an event source like click on selected elements, ...  
@@ -124,8 +137,6 @@ eventStream::delay = ( d = 6000 ) ->
     this.fail ( args... ) ->  setTimeout timer(s.reject, args), d 
     this.progress ( args... ) -> setTimeout timer(s.notify, args), d 
     s
-
-
 
 #### Observers
 
